@@ -1,3 +1,10 @@
+//////////////////////////////////////////////////////
+// Assignment/Lab/Project: PokerManager
+//Name: Wyatt Murray
+//Section: 2023SP.SGD.213.2172
+//Instructor: Brian Sowers
+// Date: 1/18/23
+//////////////////////////////////////////////////////
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,9 +18,14 @@ public class PokerManager : MonoBehaviour
     [Header("Buttons")]
     private int[] playersArray = new int[5];
     private int[] computersArray = new int[5];
+    int playerscore = 0;
+    int computerscore = 0;
     private int playerRollCounter = 0;
     [SerializeField] private Button startButton;
     [SerializeField] private Button submitButton;
+    [SerializeField] private Button RollButton;
+    [SerializeField] private TextMeshProUGUI ResponseText;
+    [SerializeField] private TextMeshProUGUI rollCounter;
 
 
 
@@ -29,7 +41,7 @@ public class PokerManager : MonoBehaviour
         
     }
 
-    void CheckScore(int[] User)
+    void CheckScore(int[] User, int WhosScore)
     {
         //sets a counter for how many times we
         int doubles = 0;
@@ -75,31 +87,37 @@ public class PokerManager : MonoBehaviour
         if (quints == 1)
         {
             //player has a 5 of a kind
+            WhosScore = 6;
         }
         else if (triples == 1)
         {
             //player has a full house
             Debug.Log("full house");
+            WhosScore = 5;
         }
         else if (triples == 1 && doubles == 1)
         {
             //player has a full house
             Debug.Log("full house");
+            WhosScore = 4;
         }
         else if (triples == 1)
         {
             //player has triples but no full house
             Debug.Log("a triple");
+            WhosScore = 3;
         }
         else if (doubles == 2)
         {
             //player has 2 doubles
             Debug.Log("2 doubles");
+            WhosScore = 2;
         }
         else if (doubles == 1)
         {
             //player only has 1 double
             Debug.Log("a double");
+            WhosScore = 1;
         }
 
         //check if the previous item is 1 lower, the same, or higher.
@@ -122,6 +140,7 @@ public class PokerManager : MonoBehaviour
         //simply returns true or false based on the counter
         if (playerRollCounter < 3)
         {
+            playerRollCounter++;
             return true;
             //set the text to playerroll counter
         }
@@ -132,7 +151,15 @@ public class PokerManager : MonoBehaviour
     }
     void PlayerCPUScoreComparison()
     {
-
+        //set the text of the response text to who won
+        if (playerscore > computerscore)
+        {
+            Debug.Log("the player won");
+        }
+        else
+        {
+            Debug.Log("the computer won");
+        }
     }
     public void PlayerRoll()
     {
@@ -140,7 +167,6 @@ public class PokerManager : MonoBehaviour
         if (RollCounter())
         {
             RollDice(playersArray);
-            CheckScore(playersArray);
         }
         
     }
@@ -148,7 +174,13 @@ public class PokerManager : MonoBehaviour
     {
         //rolls the nPC
         RollDice(computersArray);
-        CheckScore(computersArray);
+        CheckScore(playersArray, playerscore);
+        CheckScore(computersArray, computerscore);
+        PlayerCPUScoreComparison();
+    }
+    public void Quit()
+    {
+        //Application.Quit();
     }
 }
 //The game should include a title and instructions on how to play the game.
